@@ -1,23 +1,24 @@
 "use strict";
 const http = require('http');
 const crypto = require('crypto');
+const url = require('url');
 
 const PORT=8080;
 
 function handleRequest(req, res) { 
-  if(req.method === 'POST') {
+  if(req.method === 'POST' && req.url === '/') {
       let body = [];
       req.on('data', (part) => {
           body.push(part);
       }).on('end', () => {
           const bodyString = Buffer.concat(body).toString();
           console.log(`Server received: ${bodyString}`);
-          const parts = bodyString.split('=');
+          const parts = bodyString.split(/[=&]+/);
           const parameter = parts[0];
           const password = parts[1];
-          if(parameter !== 'password') {
+          if(parameter !== 'password' || password === '' || parts.length > 2) {
               res.statusCode = 400;
-              res.end(`Bad form parameter: ${parameter}`);
+              res.end(`Bad form parameter: ${bodyString}`);
           }
           else {
               setTimeout(() => {

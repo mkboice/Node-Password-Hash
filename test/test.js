@@ -69,7 +69,7 @@ describe('Node Password Hasher', ()=> {
             .catch((err) => {
                 const endTime = Date.now();
                 expect(err.statusCode).to.be.equal(400);
-                expect(err.error).to.be.equal('Bad form parameter: pass');
+                expect(err.error).to.be.equal('Bad form parameter: pass=angryMonkey');
                 expect(endTime - startTime).to.be.below(5000);
             });
     });
@@ -172,7 +172,6 @@ describe('Node Password Hasher', ()=> {
                 return reqPromise(reqOptions)
                     .catch((err) => {
                         const endTime = Date.now();
-                        console.log(`Error: ${JSON.stringify(err, null, 2)}`);
                         expect(err.name).to.be.equal("RequestError");
                         expect(endTime - startTime).to.be.below(5000);
                     });
