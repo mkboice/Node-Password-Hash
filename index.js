@@ -5,7 +5,7 @@ const url = require('url');
 
 const PORT=8080;
 
-function handleRequest(req, res) { 
+function handlePasswordHash(req, res) {
   if(req.method === 'POST' && req.url === '/') {
       let body = [];
       req.on('data', (part) => {
@@ -13,10 +13,10 @@ function handleRequest(req, res) {
       }).on('end', () => {
           const bodyString = Buffer.concat(body).toString();
           console.log(`Server received: ${bodyString}`);
-          const parts = bodyString.split(/[=&]+/);
-          const parameter = parts[0];
-          const password = parts[1];
-          if(parameter !== 'password' || password === '' || parts.length > 2) {
+          const formElements = bodyString.split(/[=&]+/);
+          const parameter = formElements[0];
+          const password = formElements[1];
+          if(parameter !== 'password' || password === '' || formElements.length > 2) {
               res.statusCode = 400;
               res.end(`Bad form parameter: ${bodyString}`);
           }
@@ -27,7 +27,6 @@ function handleRequest(req, res) {
               }, 5000);
           }
       });
-
   }
   else {
       res.statusCode = 404;
@@ -43,7 +42,7 @@ function gracefulShutdown() {
     })
 }
 
-const server = http.createServer(handleRequest);
+const server = http.createServer(handlePasswordHash);
 
 server.listen(PORT, () => {
   console.log(`Server listening on: http://localhost:${PORT}`);
