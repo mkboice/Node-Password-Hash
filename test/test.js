@@ -128,7 +128,7 @@ describe('Node Password Hasher', ()=> {
 
     });
 
-    it('should stop accepting new requesting on "graceful shutdown"', function (done) {
+    it('should stop accepting new requests on "graceful shutdown"', function (done) {
         this.timeout(17000);
 
         let parallelReqs = [];
